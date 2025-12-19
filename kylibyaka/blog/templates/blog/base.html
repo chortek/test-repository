@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Кулинарный блог{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: opacity 0.3s;
+        }
+
+        .nav a:hover {
+            opacity: 0.8;
+        }
+
+        .main-content {
+            min-height: calc(100vh - 200px);
+            padding: 3rem 0;
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .recipe-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .recipe-card-content {
+            padding: 1.5rem;
+        }
+
+        .recipe-card-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .recipe-card-description {
+            color: #666;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .recipe-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge-easy {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-hard {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .recipe-detail {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .recipe-detail-header {
+            margin-bottom: 2rem;
+        }
+
+        .recipe-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .recipe-detail-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .recipe-detail-description {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .recipe-section {
+            margin-bottom: 2rem;
+        }
+
+        .recipe-section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .ingredients-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ingredients-list li {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .instructions {
+            white-space: pre-line;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+        }
+
+        .pagination a,
+        .pagination span {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #667eea;
+        }
+
+        .pagination .current {
+            background-color: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .pagination a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .recipe-detail-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="{% url 'blog:recipe_list' %}" class="logo">🍳 Кулинарный блог</a>
+                <nav class="nav">
+                    <a href="{% url 'blog:recipe_list' %}">Главная</a>
+                    <a href="/admin/">Админ-панель</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Кулинарный блог. Все права защищены.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
+

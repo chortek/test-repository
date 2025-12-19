@@ -1,0 +1,58 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Рецепты - Кулинарный блог{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🍽️ Наши рецепты</h1>
+
+{% if recipes %}
+    <div class="recipe-grid">
+        {% for recipe in recipes %}
+            <a href="{% url 'blog:recipe_detail' recipe.slug %}" class="recipe-card">
+                {% if recipe.image %}
+                    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-card-image">
+                {% else %}
+                    <div class="recipe-card-image"></div>
+                {% endif %}
+                <div class="recipe-card-content">
+                    <h2 class="recipe-card-title">{{ recipe.title }}</h2>
+                    <p class="recipe-card-description">{{ recipe.description|truncatewords:20 }}</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ {{ recipe.cooking_time }} мин</span>
+                        <span>👥 {{ recipe.servings }} порций</span>
+                        <span class="badge badge-{{ recipe.difficulty }}">
+                            {% if recipe.difficulty == 'easy' %}Легко
+                            {% elif recipe.difficulty == 'medium' %}Средне
+                            {% else %}Сложно{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    <div style="text-align: center; padding: 3rem;">
+        <p style="font-size: 1.2rem; color: #666;">Пока нет опубликованных рецептов. Зайдите в админ-панель, чтобы добавить рецепты!</p>
+    </div>
+{% endif %}
+{% endblock %}
+
+

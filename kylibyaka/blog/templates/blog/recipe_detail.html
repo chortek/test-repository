@@ -1,0 +1,50 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}{{ recipe.title }} - Кулинарный блог{% endblock %}
+
+{% block content %}
+<div class="recipe-detail">
+    <div class="recipe-detail-header">
+        <h1 class="recipe-detail-title">{{ recipe.title }}</h1>
+        <div class="recipe-meta" style="margin-bottom: 1rem;">
+            <span>⏱️ {{ recipe.cooking_time }} минут</span>
+            <span>👥 {{ recipe.servings }} порций</span>
+            <span class="badge badge-{{ recipe.difficulty }}">
+                {% if recipe.difficulty == 'easy' %}Легко
+                {% elif recipe.difficulty == 'medium' %}Средне
+                {% else %}Сложно{% endif %}
+            </span>
+        </div>
+    </div>
+
+    {% if recipe.image %}
+        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-detail-image">
+    {% endif %}
+
+    <div class="recipe-detail-description">
+        {{ recipe.description }}
+    </div>
+
+    <div class="recipe-section">
+        <h2 class="recipe-section-title">📋 Ингредиенты</h2>
+        <ul class="ingredients-list">
+            {% for ingredient in recipe.get_ingredients_list %}
+                <li>{{ ingredient }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="recipe-section">
+        <h2 class="recipe-section-title">👨‍🍳 Инструкция по приготовлению</h2>
+        <div class="instructions">{{ recipe.instructions }}</div>
+    </div>
+
+    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #eee; text-align: center;">
+        <a href="{% url 'blog:recipe_list' %}" style="display: inline-block; padding: 0.75rem 2rem; background-color: #667eea; color: white; text-decoration: none; border-radius: 6px; transition: background-color 0.3s;">
+            ← Вернуться к списку рецептов
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+
