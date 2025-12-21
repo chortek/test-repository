@@ -1,0 +1,22 @@
+databases:
+  - name: kylibyakadb
+    plan: free
+    databaseName: kylibyaka
+    user: kylibyaka
+
+services:
+  - type: web
+    plan: free
+    name: kylibyaka
+    runtime: python
+    buildCommand: './build.sh'
+    startCommand: 'python -m gunicorn kylibyaka.asgi:application -k uvicorn.workers.UvicornWorker'
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kylibyakadb
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
