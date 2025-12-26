@@ -9,8 +9,8 @@ services:
     plan: free
     name: kylibyaka
     runtime: python
-    buildCommand: './build.sh'
-    startCommand: 'python -m gunicorn kylibyaka.asgi:application -k uvicorn.workers.UvicornWorker'
+    buildCommand: 'cd kylibyaka && ./render_build.sh'
+    startCommand: 'cd kylibyaka && ./render_start.sh'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
